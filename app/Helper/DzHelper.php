@@ -13,21 +13,21 @@ use Str;
 
 class DzHelper
 {
-	
+
 	public static function action() {
 		$chunks = explode("@",Route::currentRouteAction());
 		return end($chunks);
 	}
-	
+
 	public static function controller() {
 		$chunks = explode("\\",Route::currentRouteAction());
 		$controller = explode("@",end($chunks));
-		return $controller[0]; 
+		return $controller[0];
 	}
-	
+
 	/********************************
 	* get base url using this function
-	* $key is @params 
+	* $key is @params
 	* $key = 'AppUrl' || 'AssetUrl';
 	*********************************/
 	public static function GetBaseUrl($key = 'AppUrl') {
@@ -38,14 +38,14 @@ class DzHelper
 		}
 
 
-		if (isset($_SERVER['HTTPS']) && 
-			($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || 
-			isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && 
-			$_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') 
+		if (isset($_SERVER['HTTPS']) &&
+			($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
+			isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+			$_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')
 		{
 			$protocol = 'https://';
 		}
-		else 
+		else
 		{
 			$protocol = 'http://';
 		}
@@ -53,7 +53,7 @@ class DzHelper
 		if (!empty($_SERVER['SUBDOMAIN_DOCUMENT_ROOT'])) {
 			$_SERVER['DOCUMENT_ROOT'] = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 		}
-		/* For All Oher Server */ 
+		/* For All Oher Server */
 		$DOCUMENT_PATH = str_replace( $_SERVER['DOCUMENT_ROOT'], '', str_replace('\\', '/', base_path()));
 		$url['AppUrl'] = $protocol.request()->getHost().$DOCUMENT_PATH.'/';
 		$url['AssetUrl'] = $protocol.request()->getHost().$DOCUMENT_PATH.'/public/';
@@ -88,7 +88,7 @@ class DzHelper
 		{
 			$menu = New Menu();
 			$menuItems = $menu->get_nav_menu($menuName);
-			
+
 			if($menuItems)
 			{
 				foreach($menuItems as &$menuitem )
@@ -111,7 +111,7 @@ class DzHelper
 					}
 				}
 			}
-			
+
 			$menus = $menuItems;
 			return view('elements.nav_menu',compact('menus','menu_class'));
 		}
@@ -148,6 +148,11 @@ class DzHelper
 		return $menuItems;
 	}
 
+    public static function getStorageImage($image)
+    {
+        return asset($image);
+    }
+
 	/*
     * the_content function use for get data of content column of page by page id,
     * this function get page content in $pageContent from page model by $page->get_the_content($pageId) function,
@@ -178,7 +183,7 @@ class DzHelper
 	{
 		$page = Page::whereId($id)->orWhere('slug', $id)->first();
 		if ($page && $page->id) {
-			
+
 			$permalink = config('Permalink.settings');
 
 			$link = ['page_id' => $page->id];
@@ -186,7 +191,7 @@ class DzHelper
 			{
 				$link = ['slug' => $page->slug];
 			}
-		
+
 			return route('permalink.page_action', $link);
 		}
 		return 'javascript:void(0);';
@@ -220,7 +225,7 @@ class DzHelper
 	public static function laraBlogCategoryLink($id)
 	{
 		if (BlogCategory::whereId($id)->count() > 0) {
-			
+
 			$blog = New Blog();
 			$link = $blog->laraBlogCategoryLink($id);
 			return route('permalink.category_action', $link);
@@ -230,13 +235,13 @@ class DzHelper
 
 	/*
     * laraBlogTagLink function use for get link of blog tag by tag id,
-    * this function get tag title in $link from blog model by $blog->laraBlogTagLink($id) function, 
+    * this function get tag title in $link from blog model by $blog->laraBlogTagLink($id) function,
     * this function return tag name on route ('permalink.blogtag_action').
-    */	
+    */
 	public static function laraBlogTagLink($id)
 	{
 		if (BlogTag::whereId($id)->count() > 0) {
-			
+
 			$blog = New Blog();
 			$link = $blog->laraBlogTagLink($id);
 			return route('permalink.blogtag_action', $link);
@@ -259,7 +264,7 @@ class DzHelper
 
 	/*
     * author function use for get link of blog or page author by author id,
-    * this function get author name in $name from blog model by $blog->author($id) function, 
+    * this function get author name in $name from blog model by $blog->author($id) function,
     * this function return author name on route ('permalink.author_action').
     */
 	public static function author($id)
@@ -277,7 +282,7 @@ class DzHelper
 	public static function recentBlogs($atts = array())
     {
     	$configs = array(
-            'limit'		=> isset($atts['limit']) ? $atts['limit'] : config('Reading.nodes_per_page') , 
+            'limit'		=> isset($atts['limit']) ? $atts['limit'] : config('Reading.nodes_per_page') ,
             'order' 	=> isset($atts['order']) ? $atts['order'] : 'desc',
             'orderby' 	=> isset($atts['orderby']) ? $atts['orderby'] : 'created_at'
         );
@@ -298,7 +303,7 @@ class DzHelper
 	public static function categoryBlogs($atts = array())
     {
     	$configs = array(
-            'limit'		=> isset($atts['limit']) ? $atts['limit'] : config('Reading.nodes_per_page') , 
+            'limit'		=> isset($atts['limit']) ? $atts['limit'] : config('Reading.nodes_per_page') ,
             'order' 	=> isset($atts['order']) ? $atts['order'] : 'desc',
             'orderby' 	=> isset($atts['orderby']) ? $atts['orderby'] : 'id'
         );
@@ -346,7 +351,7 @@ class DzHelper
     */
 	public static function SearchWidget()
     {
-    	if (!empty(config('Widget.show_search_widget'))) {	
+    	if (!empty(config('Widget.show_search_widget'))) {
         	return view('widgets.search');
         }
     }
@@ -428,7 +433,7 @@ class DzHelper
 			}
 			$res[] = '</ul>';
 		}
-        
+
 		return $res ? implode(' ', $res) : '';
     }
 
@@ -457,13 +462,13 @@ class DzHelper
     }
 
     /*
-    * dzHasSidebar function use for checking site has sidebar or not. 
+    * dzHasSidebar function use for checking site has sidebar or not.
     * this function returns boolean value true or false.
-    * this function used for column class "col-8" or "col-12". 
+    * this function used for column class "col-8" or "col-12".
     */
     public static function dzHasSidebar()
     {
-		/*$col_class = false; 
+		/*$col_class = false;
         $allconfigs = Configuration::pluck('name', 'value');
 	    foreach($allconfigs as $value => $full_name){
 	         $name = explode('.', $full_name);
@@ -474,7 +479,7 @@ class DzHelper
 	    }
 	    return $col_class;*/
 
-	    $col_class = false; 
+	    $col_class = false;
         $allconfigs = Configuration::where('name', 'LIKE', "%Widget%")->pluck('name', 'value');
 	    foreach($allconfigs as $key => $value){
 			if ($key){
@@ -490,16 +495,16 @@ class DzHelper
 
     	$social_btns = array(
     					'facebook'=> array(
-    						'icon' => 'fab fa-facebook-f'	
+    						'icon' => 'fab fa-facebook-f'
     					),
     					'twitter'=> array(
-    						'icon' => 'fab fa-twitter'	
+    						'icon' => 'fab fa-twitter'
     					),
     					'linkedin'=> array(
-    						'icon' => 'fab fa-linkedin-in'	
+    						'icon' => 'fab fa-linkedin-in'
     					),
     					'pinterest'=> array(
-    						'icon' => 'fab fa-pinterest'	
+    						'icon' => 'fab fa-pinterest'
     					)
     				);
 
@@ -516,14 +521,14 @@ class DzHelper
 
 
     	$output = '<ul class="social-link-round">';
-            
+
         $output .= '<li class="link-ic"><a href="javascript:void(0);" class="btn-link share"><i class="la la-share-alt"></i></a></li>';
-            
+
 
         foreach($social_btns as $key => $social_btn){
         	$output .= '<li><a target="_blank" href="'.$social_share_link[$key].'" class="btn-link"><i class="'.$social_btn['icon'].'"></i></a></li>';
         }
-        
+
         $output .= '</ul>';
 
         return $output;

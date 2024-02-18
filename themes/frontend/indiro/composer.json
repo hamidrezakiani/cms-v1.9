@@ -1,0 +1,19 @@
+{
+    "name": "frontend/indiro",
+    "description": "Indiro - Factory & Industrial HTML Template",
+    "type": "laravel-theme",
+    "version": "1.0",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Rahul Dev Sharma",
+            "email": ""
+        }
+    ],
+    "extra": {
+        "theme": {
+            "parent": "",
+            "active": true
+        }
+    }
+}
